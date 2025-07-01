@@ -1,23 +1,23 @@
 # Claude Code Hooks - Slack Integration
 
-Claude Code用のSlack通知フックスクリプト集です。コードの実行状況をリアルタイムでSlackに通知します。
+A collection of Slack notification hook scripts for Claude Code. Notifies code execution status to Slack in real-time.
 
-## 機能
+## Features
 
-- 📢 **Notification Hook**: ユーザー確認待ち通知
-- 🔧 **PreToolUse Hook**: ツール実行前通知
-- ✅ **PostToolUse Hook**: ツール実行後の結果通知
+- 📢 **Notification Hook**: User confirmation pending notifications
+- 🔧 **PreToolUse Hook**: Pre-tool execution notifications
+- ✅ **PostToolUse Hook**: Post-tool execution result notifications
 
-## セットアップ
+## Setup
 
-### 1. リポジトリのクローン
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/HosakaKeigo/claude-code-hooks.git
 cd claude-code-hooks
 ```
 
-### 2. フック用ディレクトリの作成
+### 2. Create Hook Directory
 
 ```bash
 mkdir -p ~/.claude/hooks
@@ -25,33 +25,33 @@ cp -r hooks/* ~/.claude/hooks/
 chmod +x ~/.claude/hooks/*.py
 ```
 
-### 3. Slack Webhook URLの設定
+### 3. Configure Slack Webhook URL
 
-#### Slack Incoming Webhookの作成
+#### Create Slack Incoming Webhook
 
-1. [Slack API](https://api.slack.com/apps)にアクセス
-2. "Create New App" → "From scratch"を選択
-3. App名とWorkspaceを設定
-4. "Incoming Webhooks"を有効化
-5. "Add New Webhook to Workspace"で通知先チャンネルを選択
-6. Webhook URLをコピー
+1. Access [Slack API](https://api.slack.com/apps)
+2. Select "Create New App" → "From scratch"
+3. Set App name and Workspace
+4. Enable "Incoming Webhooks"
+5. Select notification channel with "Add New Webhook to Workspace"
+6. Copy the Webhook URL
 
-#### 環境設定ファイルの作成
+#### Create Environment Configuration File
 
 ```bash
 cp .env.example ~/.claude/hooks/.env
 ```
 
-`~/.claude/hooks/.env`を編集:
+Edit `~/.claude/hooks/.env`:
 
 ```
 SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
 SLACK_DEFAULT_CHANNEL=#claude-code
 ```
 
-### 4. Claude Code設定への追加
+### 4. Add to Claude Code Configuration
 
-`~/.claude/settings.json`に以下を追加:
+Add the following to `~/.claude/settings.json`:
 
 ```json
 {
@@ -93,27 +93,27 @@ SLACK_DEFAULT_CHANNEL=#claude-code
 }
 ```
 
-※ `/Users/YOUR_USERNAME`の部分は実際のパスに置き換えてください
+※ Replace `/Users/YOUR_USERNAME` with your actual path
 
-または、提供されている設定ファイルを使用:
+Alternatively, use the provided configuration file:
 
 ```bash
-# 既存の設定とマージ
+# Merge with existing configuration
 jq -s '.[0] * .[1]' ~/.claude/settings.json config/hooks-config.json > ~/.claude/settings.json.tmp
 mv ~/.claude/settings.json.tmp ~/.claude/settings.json
 ```
 
-### 5. 動作確認
+### 5. Verify Operation
 
-Claude Codeで設定を確認:
+Check configuration with Claude Code:
 
 ```
 claude /hooks
 ```
 
-## テスト
+## Testing
 
-個別のスクリプトをテスト:
+Test individual scripts:
 
 ```bash
 # Notification Hook
@@ -143,30 +143,30 @@ echo '{
 }' | python3 ~/.claude/hooks/post_tool_use.py
 ```
 
-## カスタマイズ
+## Customization
 
-### 通知対象ツールの変更
+### Change Target Tools for Notifications
 
-`config/hooks-config.json`の`matcher`フィールドを編集:
+Edit the `matcher` field in `config/hooks-config.json`:
 
 ```json
 "matcher": "Bash|Write|Edit|MultiEdit|Read|WebFetch|WebSearch"
 ```
 
-### 通知チャンネルの変更
+### Change Notification Channel
 
-`.env`ファイルで設定:
+Configure in the `.env` file:
 
 ```
 SLACK_DEFAULT_CHANNEL=@username  # DM
-SLACK_DEFAULT_CHANNEL=#general   # チャンネル
+SLACK_DEFAULT_CHANNEL=#general   # Channel
 ```
 
-### アイコンのカスタマイズ
+### Customize Icons
 
-各スクリプト内の`icon_emoji`を変更するか、`icon_url`を使用して画像を指定できます。
+Change `icon_emoji` in each script or specify an image using `icon_url`.
 
-## ファイル構成
+## File Structure
 
 ```
 claude-code-hooks/
@@ -174,26 +174,26 @@ claude-code-hooks/
 ├── .gitignore
 ├── .env.example
 ├── hooks/
-│   ├── slack_common.py      # 共通モジュール
+│   ├── slack_common.py      # Common module
 │   ├── slack_notifier.py    # Notification Hook
 │   ├── pre_tool_use.py      # PreToolUse Hook
 │   └── post_tool_use.py     # PostToolUse Hook
 ├── config/
-│   └── hooks-config.json    # Claude Code設定例
+│   └── hooks-config.json    # Claude Code configuration example
 └── assets/
     └── .gitkeep
 ```
 
-## 注意事項
+## Important Notes
 
-- `.env`ファイルはGitにコミットしないでください
-- Webhook URLは秘密情報として扱ってください
-- Python 3.6以上が必要です
+- Do not commit `.env` file to Git
+- Treat Webhook URL as confidential information
+- Python 3.6+ is required
 
-## ライセンス
+## License
 
 MIT License
 
-## 作者
+## Author
 
 HosakaKeigo
